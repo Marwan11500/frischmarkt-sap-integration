@@ -1,0 +1,8 @@
+node_modules/
+gen/
+*.sqlite
+.DS_Store
+.env
+.cdsrc-private.json
+*.local.http
+default-env.json
