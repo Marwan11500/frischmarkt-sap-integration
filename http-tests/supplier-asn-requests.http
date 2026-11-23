@@ -1,0 +1,85 @@
+### FrischMarkt – Phase 4 – YOU PLAY THE SUPPLIER'S DISPATCH OFFICE
+### The truck has left; the supplier sends the shipping notice (ASN) to FrischMarkt's CPI door (iFlow FM_03a).
+### 4 values from the supplier's own key fm-supplier-key (step 4.4). Never commit real values to GitHub.
+@clientid = PASTE_clientid
+@clientsecret = PASTE_clientsecret
+@tokenurl = PASTE_tokenurl
+@cpiurl = PASTE_url
+
+### 0. Get a visitor badge (OAuth token) at the reception desk
+# @name getToken
+POST {{tokenurl}}
+Authorization: Basic {{clientid}}:{{clientsecret}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+
+### 1. Fish truck to Essen: 30 kg salmon → expect 202 + <status>RECEIVED</status>
+POST {{cpiurl}}/http/fm/asn
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/xml
+
+<ShippingNotice>
+  <asnNumber>ASN-FISH-0001</asnNumber>
+  <poNumber>PO-20261118-S-ESSEN-01-P-1001</poNumber>
+  <supplier>SUP-FISH</supplier>
+  <deliverTo>S-ESSEN-01</deliverTo>
+  <shipDate>2026-11-19</shipDate>
+  <line><sku>P-1001</sku><description>Lachsfilet</description><quantity>30</quantity></line>
+</ShippingNotice>
+
+### 2. Vegetable truck to Essen with TWO lines → expect 202
+POST {{cpiurl}}/http/fm/asn
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/xml
+
+<ShippingNotice>
+  <asnNumber>ASN-VEG-0001</asnNumber>
+  <poNumber>PO-20261118-S-ESSEN-01-P-2001</poNumber>
+  <supplier>SUP-VEG</supplier>
+  <deliverTo>S-ESSEN-01</deliverTo>
+  <shipDate>2026-11-20</shipDate>
+  <line><sku>P-2001</sku><description>Tomaten</description><quantity>100</quantity></line>
+  <line><sku>P-2002</sku><description>Kartoffeln</description><quantity>20</quantity></line>
+</ShippingNotice>
+
+### 3. Broken notice (quantity is text, no shipDate) → refused at the door (XML Validator), nothing enters the inbox
+POST {{cpiurl}}/http/fm/asn
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/xml
+
+<ShippingNotice>
+  <asnNumber>ASN-BAD-0001</asnNumber>
+  <supplier>SUP-DAIRY</supplier>
+  <deliverTo>S-KOELN-01</deliverTo>
+  <line><sku>P-3001</sku><quantity>lots</quantity></line>
+</ShippingNotice>
+
+### 4. The SAME fish notice again (supplier's system sent it twice) → refused at the door while #1 still waits
+###    in the inbox; if #1 is already booked, it enters the inbox and the ERP answers ALREADY_BOOKED (no double stock)
+POST {{cpiurl}}/http/fm/asn
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/xml
+
+<ShippingNotice>
+  <asnNumber>ASN-FISH-0001</asnNumber>
+  <poNumber>PO-20261118-S-ESSEN-01-P-1001</poNumber>
+  <supplier>SUP-FISH</supplier>
+  <deliverTo>S-ESSEN-01</deliverTo>
+  <shipDate>2026-11-19</shipDate>
+  <line><sku>P-1001</sku><description>Lachsfilet</description><quantity>30</quantity></line>
+</ShippingNotice>
+
+### 5. "ERP asleep" test (step 4.15): STOP the ERP app first, then send this → still 202 for the supplier
+POST {{cpiurl}}/http/fm/asn
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/xml
+
+<ShippingNotice>
+  <asnNumber>ASN-DAIRY-0001</asnNumber>
+  <poNumber>PO-20261118-S-KOELN-01-P-3001</poNumber>
+  <supplier>SUP-DAIRY</supplier>
+  <deliverTo>S-KOELN-01</deliverTo>
+  <shipDate>2026-11-20</shipDate>
+  <line><sku>P-3001</sku><description>Vollmilch 1L</description><quantity>200</quantity></line>
+</ShippingNotice>

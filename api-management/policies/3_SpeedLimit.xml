@@ -1,0 +1,6 @@
+<!-- ProxyEndpoint · PreFlow · step 3 — speed limit per partner app.
+     5pm = 5 per minute (test value, easy to trigger). Real life e.g. 10ps = 10 per second. -->
+<SpikeArrest async="true" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<Identifier ref="verifyapikey.CheckAPIKey.client_id"/>
+	<Rate>5pm</Rate>
+</SpikeArrest>

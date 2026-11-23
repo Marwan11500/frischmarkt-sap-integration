@@ -1,0 +1,4 @@
+<!-- ProxyEndpoint · PreFlow · step 1 — the doorman checks the partner's badge (API key) -->
+<VerifyAPIKey async="true" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<APIKey ref="request.header.APIKey"/>
+</VerifyAPIKey>

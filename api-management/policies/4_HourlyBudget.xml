@@ -1,0 +1,12 @@
+<!-- ProxyEndpoint · PreFlow · step 4 — budget per partner app: 10 calls per hour (test value).
+     Real life e.g. 1000 per hour. The counter is kept per application (client_id from step 1).
+     ORDER MATTERS: SAP's schema expects exactly this order (TimeUnit must be last). -->
+<Quota async="false" continueOnError="false" enabled="true" type="calendar" xmlns="http://www.sap.com/apimgmt">
+	<Identifier ref="verifyapikey.CheckAPIKey.client_id"/>
+	<Allow count="10"/>
+	<Interval>1</Interval>
+	<Distributed>true</Distributed>
+	<StartTime>2026-11-19 00:00:00</StartTime>
+	<Synchronous>true</Synchronous>
+	<TimeUnit>hour</TimeUnit>
+</Quota>

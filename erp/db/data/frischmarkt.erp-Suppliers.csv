@@ -1,0 +1,5 @@
+ID;name;category;email
+SUP-FISH;Nordsee Fischhandel GmbH;FISH;orders@nordsee-fisch.example
+SUP-VEG;Rheinland Gemüse eG;VEG;bestellung@rheinland-gemuese.example
+SUP-DAIRY;Westfalen Molkerei AG;DAIRY;orders@westfalen-molkerei.example
+SUP-DRINKS;Ruhr Getränke KG;DRINKS;orders@ruhr-getraenke.example

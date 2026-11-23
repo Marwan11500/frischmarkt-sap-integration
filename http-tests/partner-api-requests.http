@@ -1,0 +1,41 @@
+### FrischMarkt – Phase 5 – YOU PLAY THE PARTNER APP "QuickKorb" (fictional quick-delivery app)
+### QuickKorb only knows the PUBLIC counter address and its own API key – never the ERP address or password.
+### apiurl = the API Proxy URL from the Overview page (step 5.4). On the trial it contains your account name:
+@apiurl = https://YOUR-APIM-HOST/YOUR-ACCOUNT/frischmarkt/v1
+@apikey = PASTE_application_key_from_Developer_Hub
+
+### 1. No key → refused at the counter (401, "Failed to resolve API Key variable …")
+GET {{apiurl}}/Stock?$top=3
+
+### 2. With key: live stock of the Essen store → 200
+GET {{apiurl}}/Stock?$filter=store_ID%20eq%20'S-ESSEN-01'&$select=product_ID,quantity
+APIKey: {{apikey}}
+
+### 3. With key: product list (names, prices) → 200
+GET {{apiurl}}/Products?$select=ID,name,price,unit
+APIKey: {{apikey}}
+
+### 4. With key, but a door the partner must not open: sales orders → 403
+GET {{apiurl}}/SalesOrders
+APIKey: {{apikey}}
+
+### 5. With key, but trying to WRITE → 403
+POST {{apiurl}}/SalesOrders
+APIKey: {{apikey}}
+Content-Type: application/json
+
+{ "externalId": "QK-HACK-1", "store_ID": "S-ESSEN-01", "items": [ { "product_ID": "P-1001", "quantity": 1 } ] }
+
+### 6. Wrong key → 401 ("Invalid ApiKey")
+GET {{apiurl}}/Stores
+APIKey: this-is-not-a-real-key
+
+### 7. Speed limit: click "Send Request" on this one 3 times FAST → the 2nd/3rd answer is refused
+###    (SpikeArrestViolation, HTTP 429 or 500 depending on the tenant)
+GET {{apiurl}}/Stores
+APIKey: {{apikey}}
+
+### 8. Hourly budget: after 10 successful calls in this hour every call is refused
+###    (QuotaViolation "Rate limit quota violation. Quota limit exceeded", HTTP 500 or 429)
+GET {{apiurl}}/Stores
+APIKey: {{apikey}}

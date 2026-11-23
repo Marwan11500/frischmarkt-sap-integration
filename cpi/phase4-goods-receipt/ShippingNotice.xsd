@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FrischMarkt · Phase 4 · the supplier's shipping notice (ASN = Advance Shipping Notice).
+     Used by the XML Validator in FM_03a: a notice that does not match is refused at the door. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="ShippingNotice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="asnNumber" type="xs:string"/>
+        <xs:element name="poNumber"  type="xs:string" minOccurs="0"/>
+        <xs:element name="supplier"  type="xs:string"/>
+        <xs:element name="deliverTo" type="xs:string"/>
+        <xs:element name="shipDate"  type="xs:date"/>
+        <xs:element name="line" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="sku"         type="xs:string"/>
+              <xs:element name="description" type="xs:string" minOccurs="0"/>
+              <xs:element name="quantity"    type="xs:positiveInteger"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

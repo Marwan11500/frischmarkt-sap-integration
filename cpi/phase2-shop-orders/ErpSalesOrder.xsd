@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FrischMarkt ERP sales order (before XML to JSON conversion) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="SalesOrder">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="externalId" type="xs:string"/>
+        <xs:element name="store_ID" type="xs:string"/>
+        <xs:element name="customerEmail" type="xs:string" minOccurs="0"/>
+        <xs:element name="items" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="product_ID" type="xs:string"/>
+              <xs:element name="quantity" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

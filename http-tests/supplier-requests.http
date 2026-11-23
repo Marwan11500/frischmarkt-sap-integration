@@ -1,0 +1,45 @@
+### FrischMarkt · Phase 3 · test the supplier API directly (before CPI uses it)
+### Open in BAS with the REST Client extension, like shop-requests.http in Phase 2.
+### Fill in YOUR values. Never commit or post the API key anywhere public.
+
+@apiurl = https://YOUR-API-ID.execute-api.eu-central-1.amazonaws.com/prod/purchase-orders
+@apikey = PASTE-YOUR-API-KEY-HERE
+
+### 1 · Salmon for Essen, EXPRESS → expect 200 CONFIRMED, delivery tomorrow
+POST {{apiurl}}
+x-api-key: {{apikey}}
+Content-Type: application/xml
+
+<PurchaseOrder>
+  <poNumber>PO-TEST-1</poNumber>
+  <supplier>SUP-FISH</supplier>
+  <priority>EXPRESS</priority>
+  <deliverTo>S-ESSEN-01</deliverTo>
+  <line><sku>P-1001</sku><description>Lachsfilet</description><quantity>30</quantity></line>
+</PurchaseOrder>
+
+### 2 · Apfelschorle → expect 422 REJECTED "Sold out at supplier"
+POST {{apiurl}}
+x-api-key: {{apikey}}
+Content-Type: application/xml
+
+<PurchaseOrder>
+  <poNumber>PO-TEST-2</poNumber>
+  <supplier>SUP-DRINKS</supplier>
+  <priority>STANDARD</priority>
+  <deliverTo>S-ESSEN-01</deliverTo>
+  <line><sku>P-4002</sku><description>Apfelschorle 1L</description><quantity>150</quantity></line>
+</PurchaseOrder>
+
+### 3 · No API key → expect 403 {"message":"Forbidden"} (API Gateway stops it; Lambda never runs)
+POST {{apiurl}}
+Content-Type: application/xml
+
+<PurchaseOrder><supplier>SUP-FISH</supplier></PurchaseOrder>
+
+### 4 · Not XML → expect 400 "Body is not valid XML"
+POST {{apiurl}}
+x-api-key: {{apikey}}
+Content-Type: application/xml
+
+hello supplier

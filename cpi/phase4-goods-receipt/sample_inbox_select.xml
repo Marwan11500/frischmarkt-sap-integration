@@ -1,0 +1,13 @@
+<messages>
+  <message id="ASN-VEG-0001">
+    <ShippingNotice>
+      <asnNumber>ASN-VEG-0001</asnNumber>
+      <poNumber>PO-20261118-S-ESSEN-01-P-2001</poNumber>
+      <supplier>SUP-VEG</supplier>
+      <deliverTo>S-ESSEN-01</deliverTo>
+      <shipDate>2026-11-20</shipDate>
+      <line><sku>P-2001</sku><description>Tomaten</description><quantity>100</quantity></line>
+      <line><sku>P-2002</sku><description>Kartoffeln</description><quantity>20</quantity></line>
+    </ShippingNotice>
+  </message>
+</messages>

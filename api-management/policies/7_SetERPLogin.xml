@@ -1,0 +1,8 @@
+<!-- TargetEndpoint · PreFlow · step 2 — the counter clerk logs in at the ERP with FrischMarkt's key ("last-mile security") -->
+<BasicAuthentication async="false" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<Operation>Encode</Operation>
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<User ref="private.erp_user"/>
+	<Password ref="private.erp_pass"/>
+	<AssignTo createNew="false">request.header.Authorization</AssignTo>
+</BasicAuthentication>

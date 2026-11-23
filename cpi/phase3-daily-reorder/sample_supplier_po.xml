@@ -1,0 +1,11 @@
+<PurchaseOrder>
+   <poNumber>PO-20261117-S-ESSEN-01-P-1001</poNumber>
+   <supplier>SUP-FISH</supplier>
+   <priority>EXPRESS</priority>
+   <deliverTo>S-ESSEN-01</deliverTo>
+   <line>
+      <sku>P-1001</sku>
+      <description>Lachsfilet</description>
+      <quantity>30</quantity>
+   </line>
+</PurchaseOrder>

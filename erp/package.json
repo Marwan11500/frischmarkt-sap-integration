@@ -1,0 +1,48 @@
+{
+  "name": "frischmarkt-erp",
+  "version": "1.0.0",
+  "description": "FrischMarkt ERP - simulated S/4HANA core (CAP, OData V4)",
+  "type": "module",
+  "dependencies": {
+    "@sap/cds": "^10",
+    "@cap-js/sqlite": "^3"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "build:cf": "cds build --production && mkdir -p gen/srv/db && cp -r db/data gen/srv/db/"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "cds": {
+    "requires": {
+      "auth": {
+        "kind": "mocked",
+        "users": {
+          "cpi": {
+            "password": "CHANGE_ME_cpi",
+            "roles": []
+          },
+          "marwan": {
+            "password": "CHANGE_ME_marwan",
+            "roles": []
+          },
+          "apim": {
+            "password": "CHANGE_ME_apim",
+            "roles": []
+          }
+        }
+      },
+      "[production]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        }
+      }
+    }
+  },
+  "private": true
+}

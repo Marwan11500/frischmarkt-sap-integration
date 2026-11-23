@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShopOrder>
+  <orderNumber>WEB-100045</orderNumber>
+  <pickupStore>ESSEN</pickupStore>
+  <customer>
+    <email>kunde@example.com</email>
+  </customer>
+  <lines>
+    <sku>P-2002</sku>
+    <qty>3</qty>
+  </lines>
+  <lines>
+    <sku>P-4001</sku>
+    <qty>6</qty>
+  </lines>
+</ShopOrder>

@@ -1,0 +1,10 @@
+<!-- ProxyEndpoint · PreFlow · step 5 — the partner's badge stays at the counter, it is never passed to the ERP -->
+<AssignMessage async="false" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<Remove>
+		<Headers>
+			<Header name="APIKey"/>
+		</Headers>
+	</Remove>
+	<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+	<AssignTo createNew="false" type="request">request</AssignTo>
+</AssignMessage>

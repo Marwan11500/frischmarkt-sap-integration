@@ -1,0 +1,13 @@
+<!-- ProxyEndpoint · PreFlow · step 2 — runs ONLY when the Condition String below is true:
+     (request.verb != "GET") OR !((proxy.pathsuffix = "/Stock") OR (proxy.pathsuffix = "/Products") OR (proxy.pathsuffix = "/Stores"))
+     → anything other than reading stock, products or stores is refused with 403 -->
+<RaiseFault async="true" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<FaultResponse>
+		<Set>
+			<Payload contentType="application/json">{"error":"Partners may only read /Stock, /Products and /Stores (GET)."}</Payload>
+			<StatusCode>403</StatusCode>
+			<ReasonPhrase>Forbidden</ReasonPhrase>
+		</Set>
+	</FaultResponse>
+	<IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

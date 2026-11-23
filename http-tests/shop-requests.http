@@ -1,0 +1,80 @@
+### FrischMarkt – the ONLINE SHOP sends orders to CPI (iFlow FM_01)
+### Fill in the 4 values from your service key fm-shop-key (BTP cockpit → Instances → fm-shop-runtime → fm-shop-key).
+### Never commit this file with real values to GitHub.
+@clientid = PASTE_clientid
+@clientsecret = PASTE_clientsecret
+@tokenurl = PASTE_tokenurl
+@cpiurl = PASTE_url
+
+### 0. Get a visitor badge (OAuth token) at the reception desk
+# @name getToken
+POST {{tokenurl}}
+Authorization: Basic {{clientid}}:{{clientsecret}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+
+### 1. Normal order: 2 lines, pickup in Essen → expect 201, status CONFIRMED
+POST {{cpiurl}}/http/fm/shop-order
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "ShopOrder": {
+    "orderNumber": "WEB-100045",
+    "pickupStore": "ESSEN",
+    "customer": { "email": "kunde@example.com" },
+    "lines": [
+      { "sku": "P-2002", "qty": 3 },
+      { "sku": "P-4001", "qty": 6 }
+    ]
+  }
+}
+
+### 2. Order with ONE line, pickup in Köln → expect 201 (tests the array setting in the XML-to-JSON converter)
+POST {{cpiurl}}/http/fm/shop-order
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "ShopOrder": {
+    "orderNumber": "WEB-100046",
+    "pickupStore": "KOELN",
+    "customer": { "email": "x@example.com" },
+    "lines": [
+      { "sku": "P-3001", "qty": 2 }
+    ]
+  }
+}
+
+### 3. Too much salmon → the ERP says 409; CPI reports an error (we handle it nicely in Phase 6)
+POST {{cpiurl}}/http/fm/shop-order
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "ShopOrder": {
+    "orderNumber": "WEB-100047",
+    "pickupStore": "ESSEN",
+    "customer": { "email": "y@example.com" },
+    "lines": [
+      { "sku": "P-1001", "qty": 50 }
+    ]
+  }
+}
+
+### 4. Unknown store "BERLIN" → the mapping stops the message (fixValues: throw exception)
+POST {{cpiurl}}/http/fm/shop-order
+Authorization: Bearer {{getToken.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "ShopOrder": {
+    "orderNumber": "WEB-100048",
+    "pickupStore": "BERLIN",
+    "customer": { "email": "z@example.com" },
+    "lines": [
+      { "sku": "P-2001", "qty": 1 }
+    ]
+  }
+}

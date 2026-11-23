@@ -1,0 +1,91 @@
+### FrischMarkt ERP – test requests (REST Client in BAS / VS Code)
+@base = http://localhost:4004/odata/v4/erp
+@auth = Basic cpi:CHANGE_ME_cpi
+
+### 1. All products
+GET {{base}}/Products
+Authorization: {{auth}}
+
+### 2. What must be re-ordered?
+GET {{base}}/LowStock
+Authorization: {{auth}}
+
+### 3. Stock of one store, with product names
+GET {{base}}/Stock?$filter=store_ID%20eq%20'S-ESSEN-01'&$expand=product($select=name)
+Authorization: {{auth}}
+
+### 4. Create a sales order (like the online shop will do later via CPI)
+POST {{base}}/SalesOrders
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "externalId": "SHOP-0001",
+  "store_ID": "S-ESSEN-01",
+  "customerEmail": "kunde@example.com",
+  "items": [
+    { "product_ID": "P-2002", "quantity": 3 },
+    { "product_ID": "P-4001", "quantity": 6 }
+  ]
+}
+
+### 5. Order that must FAIL (not enough salmon) → 409
+POST {{base}}/SalesOrders
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "externalId": "SHOP-0002",
+  "store_ID": "S-ESSEN-01",
+  "items": [ { "product_ID": "P-1001", "quantity": 50 } ]
+}
+
+### 6. All orders with their items
+GET {{base}}/SalesOrders?$expand=items
+Authorization: {{auth}}
+
+### ─── Phase 4: goods receipt ───────────────────────────────
+
+### 7. Book a delivery: 30 kg salmon arrives in Essen → expect 200, status BOOKED
+POST {{base}}/postGoodsReceipt
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "asnNumber": "ASN-TEST-0001",
+  "supplierId": "SUP-FISH",
+  "storeId": "S-ESSEN-01",
+  "items": [ { "productId": "P-1001", "quantity": 30 } ]
+}
+
+### 8. Same delivery again → expect 200, status ALREADY_BOOKED, stock does NOT go up twice
+POST {{base}}/postGoodsReceipt
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "asnNumber": "ASN-TEST-0001",
+  "supplierId": "SUP-FISH",
+  "storeId": "S-ESSEN-01",
+  "items": [ { "productId": "P-1001", "quantity": 30 } ]
+}
+
+### 9. Wrong supplier for salmon → expect 400
+POST {{base}}/postGoodsReceipt
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "asnNumber": "ASN-TEST-0002",
+  "supplierId": "SUP-VEG",
+  "storeId": "S-ESSEN-01",
+  "items": [ { "productId": "P-1001", "quantity": 3 } ]
+}
+
+### 10. Check: salmon in Essen is now 36, and the receipt is visible
+GET {{base}}/Stock?$filter=store_ID%20eq%20'S-ESSEN-01'%20and%20product_ID%20eq%20'P-1001'
+Authorization: {{auth}}
+
+###
+GET {{base}}/GoodsReceipts?$expand=items
+Authorization: {{auth}}

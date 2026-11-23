@@ -1,0 +1,19 @@
+FrischMarkt daily reorder report · 2026-11-18 06:00
+Lines: 10 · confirmed: 9 · rejected: 1
+------------------------------------------------------------------------------
+SUP-DAIRY
+  S-ESSEN-01  P-3002  x40    STANDARD  CONFIRMED  delivery 2026-11-19 (DAIRY-AD0FB531)
+  S-KOELN-01  P-3001  x200   STANDARD  CONFIRMED  delivery 2026-11-19 (DAIRY-64DA57D7)
+SUP-DRINKS
+  S-DUS-01    P-4001  x300   STANDARD  CONFIRMED  delivery 2026-11-19 (DRINKS-349636B1)
+  S-ESSEN-01  P-4002  x150   STANDARD  REJECTED   REASON: Sold out at supplier until next week
+SUP-FISH
+  S-DUS-01    P-1002  x25    EXPRESS   CONFIRMED  delivery 2026-11-18 (FISH-2E2FE7FE)
+  S-ESSEN-01  P-1001  x30    EXPRESS   CONFIRMED  delivery 2026-11-18 (FISH-67B54530)
+  S-KOELN-01  P-1003  x15    EXPRESS   CONFIRMED  delivery 2026-11-18 (FISH-24078CA5)
+SUP-VEG
+  S-DUS-01    P-2002  x200   STANDARD  CONFIRMED  delivery 2026-11-19 (VEG-7C4F0DCB)
+  S-ESSEN-01  P-2001  x100   STANDARD  CONFIRMED  delivery 2026-11-19 (VEG-54CD66F4)
+  S-KOELN-01  P-2003  x150   STANDARD  CONFIRMED  delivery 2026-11-19 (VEG-C498E192)
+------------------------------------------------------------------------------
+ACTION NEEDED: 1 line(s) rejected. Buy elsewhere or call the supplier.
